@@ -1,0 +1,54 @@
+<project name="compile" default="help">
+   <target name="help"/>
+
+   <path id="jars.path">
+     <fileset dir="jars">
+       <include name="**/*.jar"/>
+     </fileset>
+   </path>
+
+   <path id="test.path">
+     <fileset dir="jars">
+       <include name="**/*.jar"/>
+     </fileset>
+     <fileset dir=".">
+       <include name="bin"/>
+     </fileset>
+   </path>
+
+   <path id="src.path">
+     <pathelement location="labs" />
+     <pathelement location="studios" />
+     <pathelement location="coursesupport" />
+     <pathelement location="javacheck" />
+   </path>
+ 
+   <target name="copytest">
+      <echo message="would copy from ${unittestsource} key ${key} testfilesource ${testfilesource} package ${pkg} repo ${repo}"/>
+      <copy overwrite="true" file="${unittestsource}/labs/${pkg}/${testfilesource}.java" tofile="${repo}/labs/${pkg}/${testfilesource}.java"/>
+   </target>
+
+   <target name="compile">
+      <echo message="Compiling ${package}/${file}"/>
+      <mkdir dir="bin"/>
+      <javac includeantruntime="false" destdir="bin" nowarn="true" failonerror="false" debug="true"  encoding="iso-8859-1">
+         <classpath refid="jars.path"/>
+         <src refid="src.path"/>
+         <include name="${package}/${file}.java"/>
+      </javac>
+   </target>
+
+   <target name="test">
+      <junit haltonfailure="true" fork="true" timeout="${timeout}" printsummary="withOutAndErr" showoutput="true">
+      <test name ="${test}"/>
+         <formatter type="plain" usefile="false"/>
+         <classpath>
+            <pathelement path="bin"/>
+            <pathelement location="jars/junit-4.12.jar"/>
+            <pathelement location="jars/hamcrest-core-1.3.jar"/>
+            <!-- <pathelement location="../../autograder-jars/heaps.jar"/> -->
+         </classpath>
+      </junit>
+   </target>
+
+</project>
